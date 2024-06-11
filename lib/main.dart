@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tp_twitter/footer.dart';
 import 'package:tp_twitter/header.dart';
+import 'package:tp_twitter/tweet-card.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,16 +36,11 @@ class MyHomePage extends StatelessWidget {
         children: [
           Header(),
           Expanded(child:
-              Column(children: [
-                Container(color: Colors.amber, height: 96,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                  Text("Répondre"),
-                  Text("Retweet"),
-                  Text("Favoris"),
-                ],)
-              ],)
+            Column(
+              children: [
+                TweetCard(),
+              ],
+            )
           ),
           Footer()
         ],
