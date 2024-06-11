@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tp_twitter/footer.dart';
+import 'package:tp_twitter/header.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,17 +23,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HeaderButton extends StatelessWidget {
-  String label;
-
-  HeaderButton(this.label) { }
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(child: Text(this.label, textAlign: TextAlign.center, style: TextStyle(color: Colors.white),));
-  }
-}
-
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -42,17 +33,20 @@ class MyHomePage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Container(
-            decoration: BoxDecoration(color: Color(0xFF58B0F0)),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(children: [
-                HeaderButton("Nouveau"),
-                HeaderButton("Accueil"),
-                HeaderButton("Recherché"),
-              ],),
-            ),
-          )
+          Header(),
+          Expanded(child:
+              Column(children: [
+                Container(color: Colors.amber, height: 96,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                  Text("Répondre"),
+                  Text("Retweet"),
+                  Text("Favoris"),
+                ],)
+              ],)
+          ),
+          Footer()
         ],
       ),
     );
