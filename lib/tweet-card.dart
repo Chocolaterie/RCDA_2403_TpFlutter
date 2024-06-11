@@ -36,9 +36,9 @@ class TweetCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text("Répondre"),
-              Text("Retweet"),
-              Text("Favoris"),
+              IconButton(onPressed: () {}, icon: Image.asset('images/reply.png', width: 24,),),
+              IconButton(onPressed: () {}, icon: Image.asset('images/retweet.png', width: 24),),
+              IconButton(onPressed: () {}, icon: Image.asset('images/favorite.png', width: 24),),
             ],),
         )
       ]),
