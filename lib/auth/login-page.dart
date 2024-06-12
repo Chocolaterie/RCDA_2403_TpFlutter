@@ -7,7 +7,7 @@ class LoginPage extends StatelessWidget {
   var formKey = GlobalKey<FormState>();
 
   /// Quand je clique sur le bouton du formulaire
-  void onClickSubmit(){
+  void onClickSubmit(BuildContext context){
     // Enclancher la validation
     // PS : Plus tard on aura un appel API donc Guard Clause
     // je return quand erreur
@@ -16,6 +16,7 @@ class LoginPage extends StatelessWidget {
     }
 
     // TODO : Appel API pour le service connexion
+    Navigator.pushNamed(context, "/show");
   }
 
   @override
@@ -79,7 +80,7 @@ class LoginPage extends StatelessWidget {
                     child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                            onPressed: onClickSubmit, child: Padding(
+                            onPressed: () => onClickSubmit(context), child: Padding(
                               padding: const EdgeInsets.all(12),
                               child: Text("Connexion"),
                             ))),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tp_twitter/auth/login-page.dart';
+import 'package:tp_twitter/home/home-page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginPage(),
+      initialRoute: '/',
+      routes: {
+        '/' : (context) => LoginPage(),
+        '/show' : (context) => MyHomePage()
+      },
     );
   }
 }
