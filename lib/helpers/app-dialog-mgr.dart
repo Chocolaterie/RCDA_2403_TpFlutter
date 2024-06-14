@@ -36,9 +36,30 @@ class AppDialogMgr {
         barrierColor: Color(0x77000000));
   }
 
-  // Fermer le chargement
+  /// Fermer le chargement
   void closeProgress() {
     pgDl!.close();
+  }
+
+  /// Afficher popup d'erreur
+  void showErrorAlert(BuildContext context, String message){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Erreur'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
 }

@@ -1,13 +1,19 @@
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:tp_twitter/app-theme.dart';
+import 'package:tp_twitter/auth/user-context-mgr.dart';
+import 'package:tp_twitter/helpers/app-dialog-mgr.dart';
 import 'package:tp_twitter/helpers/app-validators.dart';
 
 class LoginPage extends StatelessWidget {
 
+  var _emailController = TextEditingController(text: "isaac@gmail.com");
+  var _passwordController = TextEditingController(text: "123456");
   var formKey = GlobalKey<FormState>();
 
   /// Quand je clique sur le bouton du formulaire
-  void onClickSubmit(BuildContext context){
+  void onClickSubmit(BuildContext context) async {
     // Enclancher la validation
     // PS : Plus tard on aura un appel API donc Guard Clause
     // je return quand erreur
@@ -15,7 +21,33 @@ class LoginPage extends StatelessWidget {
       return;
     }
 
-    // TODO : Appel API pour le service connexion
+    // Appel API pour le service connexion
+    final url = Uri.parse('http://127.0.0.1:3000/auth');
+    final headers = {"Content-Type": "application/json"};
+    final body = convert.json.encode({
+      'email': _emailController.text,
+      'password': _passwordController.text,
+    });
+
+    // Appel POST de l'auth
+    final response = await http.post(url, headers: headers, body: body);
+
+    // Convertir le body de la réponse http en json
+    var json = convert.jsonDecode(response.body);
+
+    // Normalement : Code , Message , Data
+    // Erreur : Afficher la popup d'erreur
+    if (json ['code'] != "203"){
+      AppDialogMgr().showErrorAlert(context, json['message'] as String);
+      return;
+    }
+
+    // Pas d'erreur
+    // -- stocker le token
+    var token = json['data'] as String;
+    UserContextMgr().refreshToken(token);
+
+    // -- changer de page
     Navigator.pushNamed(context, "/show");
   }
 
@@ -54,13 +86,15 @@ class LoginPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: TextFormField(
+                      controller: _emailController,
                       validator: AppValidators.validateEmail,
                       decoration: AppTheme.buildFormDecoration("Email"),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: TextField(
+                    child: TextFormField(
+                      controller: _passwordController,
                       decoration: AppTheme.buildFormDecoration("Password"),
                       obscureText: true,
                     ),

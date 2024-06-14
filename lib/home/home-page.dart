@@ -5,6 +5,7 @@ import 'package:tp_twitter/helpers/app-dialog-mgr.dart';
 import 'package:tp_twitter/tweet-card.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
+import '../auth/user-context-mgr.dart';
 import '../message/tweet.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -22,21 +23,35 @@ class _MyHomePageState extends State<MyHomePage> {
     // Simuler 1 seconde de lag
     await Future.delayed(Duration(seconds: 2));
 
-    // appel l'api
-    var url = Uri.parse("https://raw.githubusercontent.com/Chocolaterie/EniWebService/main/api/tweets.json");
-    var response = await http.get(url);
+    // Appel l'api
+    var token = UserContextMgr().token;
+
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    var url = Uri.parse("http://127.0.0.1:3000/v2/comment/all");
+    var response = await http.get(url, headers: headers);
 
     // map la reponse en json
     var json = convert.jsonDecode(response.body);
 
-    // la réponse en liste de tweet
-    tweets = List<Tweet>.from(json.map((tweetJson) => Tweet.fromJson(tweetJson)).toList());
+    // fermer la boite de chargement
+    AppDialogMgr().closeProgress();
+
+    // Erreur (pas de token)
+    if (json['code'] != '200'){
+      // Affiche la popup d'erreur
+      AppDialogMgr().showErrorAlert(context, json['message'] as String);
+      return;
+    }
+
+    // La réponse en liste de tweet
+    tweets = List<Tweet>.from(json['data'].map((tweetJson) => Tweet.fromJson(tweetJson)).toList());
 
     // refresh la page
     setState(() {});
-
-    // fermer la boite de chargement
-    AppDialogMgr().closeProgress();
   }
 
   @override
